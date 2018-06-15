@@ -20,7 +20,7 @@ public class Application {
 	public ThreadPoolTaskExecutor threadPoolTaskExecutor() {
 
 		ThreadPoolTaskExecutor threadPoolTaskExecutor = new ThreadPoolTaskExecutor();
-		threadPoolTaskExecutor.setCorePoolSize(100);
+		threadPoolTaskExecutor.setCorePoolSize(10);
 		threadPoolTaskExecutor.setMaxPoolSize(100);
 		threadPoolTaskExecutor.setQueueCapacity(1024);
 		threadPoolTaskExecutor.setRejectedExecutionHandler(new ThreadPoolExecutor.CallerRunsPolicy());

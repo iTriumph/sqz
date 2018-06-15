@@ -58,7 +58,6 @@ public class FamilyDoctorService {
 	public JSONObject sign(String body) {
 
 		String requestUrl = "http://182.150.40.144:8092/pcn-core/*.jsonRequest";
-		System.err.println(body);
 
 		HttpHeaders headers = new HttpHeaders();
 		headers.set("X-Service-Method", "addSignResident");

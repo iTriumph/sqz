@@ -37,7 +37,7 @@ public class TestController {
 
 		data = new String(data.getBytes(StandardCharsets.ISO_8859_1), StandardCharsets.UTF_8);
 
-		List<List<String>> userList = POIExcelRead.ReadXLSX(new File("/Users/baby/Desktop/import.xlsx"));
+		List<List<String>> userList = POIExcelRead.ReadXLSX(new File("/Users/iMiracle/Desktop/import.xlsx"));
 		for (final List<String> user : userList) {
 
 			threadPoolTaskExecutor.execute(
@@ -50,11 +50,6 @@ public class TestController {
 							boolean sign = "1".equals(userInfo.getJSONObject("body").getString("isSign"));
 							if (sign) {
 								count.incrementAndGet();
-								return;
-							}
-
-							if (userInfo.getJSONObject("body").getString("residentInfo") == null) {
-								System.err.println("用户身份证号码错误: " + user);
 								return;
 							}
 
@@ -81,7 +76,11 @@ public class TestController {
 							body = body.replace("@{sex}", sex);
 							body = body.replace("@{sexType}", sexType);
 
-							System.err.println(familyDoctorService.sign(body));
+							try {
+								familyDoctorService.sign(body);
+							} catch (Exception e) {
+								System.err.println("用户身份证号码错误: " + user);
+							}
 						}
 					}
 			);
