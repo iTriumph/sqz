@@ -6,6 +6,7 @@ import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -25,7 +26,7 @@ public class POIExcelRead {
 
 	public static void main(String[] args) throws IOException {
 
-		String filePath = "/Users/baby/Desktop/import.xlsx";
+		String filePath = "/Users/imiracle/Desktop/import.xlsx";
 		File file = new File(filePath);
 
 		if (filePath.endsWith(XLS)) {
@@ -54,16 +55,19 @@ public class POIExcelRead {
 			}
 			System.out.println();
 		}
+
+		workbook.close();
 	}
 
 	public static List<List<String>> ReadXLSX(File file) throws IOException {
+
 		XSSFWorkbook workbook = new XSSFWorkbook(FileUtils.openInputStream(file));
 		XSSFSheet sheet = workbook.getSheetAt(0);
 		int lastRowNum = sheet.getLastRowNum();
 		System.out.println(lastRowNum);
 
 		List<List<String>> userList = new ArrayList<>();
-		for (int i = 0; i <= lastRowNum; i++) {
+		for (int i = 1; i <= lastRowNum; i++) {
 
 			XSSFRow row = sheet.getRow(i);
 			Map<String, String> userMap = new HashMap<>();
@@ -73,9 +77,14 @@ public class POIExcelRead {
 			for (int j = 0; j < lastCellNum; j++) {
 
 				Cell cell = row.getCell(j);
-				String value = null;
+				if (cell == null) {
+					continue;
+				}
 
-				switch (cell.getCellTypeEnum()) {
+				String value = null;
+				CellType cellType = cell.getCellTypeEnum();
+
+				switch (cellType) {
 					case STRING:
 						value = cell.getStringCellValue();
 						break;
@@ -84,13 +93,15 @@ public class POIExcelRead {
 						value =decimalFormat.format(cell.getNumericCellValue());
 						break;
 					default:
-						System.err.println("error...: " + i + "  " + cell.getRowIndex());
+						System.err.println("error...: " + i + "  " + cell.getRowIndex() + "  " + user);
 				}
 				user.add(value);
 			}
 
 			userList.add(user);
 		}
+
+		workbook.close();
 
 		return userList;
 	}
